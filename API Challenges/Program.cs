@@ -40,8 +40,8 @@ app.MapTemperatureEndpoints();
 // //Challenge 7: Password Generator
 // app.MapPasswordEndpoints();
 
-// //Challenge 8: Simple Validator
-// app.MapSimpleValidatorEndPoints();
+//Challenge 8: Simple Validator
+app.MapSimpleValidatorEndPoints();
 
 // //Challenge 9: Unit Converter
 // app.MapUnitConverterEndpoints();
