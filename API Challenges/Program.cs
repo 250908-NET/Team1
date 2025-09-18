@@ -38,13 +38,13 @@ app.MapColorsEndpoints();
 app.MapTemperatureEndpoints();
 
 // //Challenge 7: Password Generator
-// app.MapPasswordEndpoints();
+app.MapPasswordEndpoints();
 
 //Challenge 8: Simple Validator
 app.MapSimpleValidatorEndPoints();
 
 // //Challenge 9: Unit Converter
-// app.MapUnitConverterEndpoints();
+app.MapUnitConverterEndpoints();
 
 // //Challenge 10: Weather History
 app.MapWeatherHistoryEndpoints();
