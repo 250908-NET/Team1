@@ -57,5 +57,19 @@ public static class NumberGamesEndpoints
 
             return Results.Ok(b);
         });
+
+        app.MapGet("/numbers/factors/{number}", (int number) =>
+        {
+            if (number <= 0) return Results.BadRequest("Number must be positive.");
+
+            List<int> factors = new List<int>();
+
+            for (int i = 1; i <= number; i++)
+            {
+                if (number % i == 0) factors.Add(i);
+            }
+
+            return Results.Ok(string.Join(", ", factors));
+        });
     }
 }
