@@ -45,3 +45,25 @@ public static class GameEndpoints
         });
     }
 }
+
+//dice roll game
+app.MapGet("/game/dice/{sides:int}/{count:int}", (int sides, int count) =>
+        {
+            if (sides < 2 || count < 1)
+                return Results.BadRequest(new { message = "Sides must be >=2 and count >=1." });
+
+
+// to store the number - rolled(created a list for holding that value)
+//initially it will be empty
+
+            var rolls = new List<int>();
+
+            for (int i = 0; i < count; i++)
+            // random.Next - will hold min and max value
+            
+                rolls.Add(random.Next(1, sides + 1));
+
+                //returning -with sides,count and rolls
+
+            return Results.Ok(new { sides, count, rolls });
+        });
