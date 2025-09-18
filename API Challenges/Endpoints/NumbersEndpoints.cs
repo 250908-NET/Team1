@@ -39,5 +39,23 @@ public static class NumberGamesEndpoints
 
             return true;
         });
+
+        app.MapGet("/numbers/fibonacci/{number}", (int number) =>
+        {
+            if (number < 0) return Results.BadRequest("Number must be non-negative.");
+
+            if (number == 0) return Results.Ok(0);
+            if (number == 1) return Results.Ok(1);
+
+            int a = 0, b = 1, c = 0;
+            for (int i = 2; i <= number; i++)
+            {
+                c = a + b;
+                a = b;
+                b = c;
+            }
+
+            return Results.Ok(b);
+        });
     }
 }
