@@ -42,18 +42,12 @@ public static class TemperatureEndpoints
             };
         });
         // compare two temperatures
-        app.MapGet("/temp/compare/{temp1}/{unit1}/{temp2}/{unit2}", (HttpContext context) =>
+        app.MapGet("/temp/compare/{temp1}/{unit1}/{temp2}/{unit2}", (float temp1, string unit1, float temp2, string unit2) =>
         {
             string result;
 
             try
             {
-                var routeValues = context.Request.RouteValues;
-                float temp1 = float.Parse(routeValues["temp1"]?.ToString() ?? "0");
-                string unit1 = routeValues["unit1"]?.ToString() ?? "";
-                float temp2 = float.Parse(routeValues["temp2"]?.ToString() ?? "0");
-                string unit2 = routeValues["unit2"]?.ToString() ?? "";
-
                 float t1InCelsius = ConvertToCelsius(temp1, unit1);
                 float t2InCelsius = ConvertToCelsius(temp2, unit2);
 
