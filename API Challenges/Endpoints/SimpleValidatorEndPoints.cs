@@ -1,14 +1,14 @@
-public static class CalculatorEndpoints
+public static class SimpleValidatorEndPoints
 {
-    public static void SimpleValidatorEndPoints(this IEndpointRouteBuilder app)
+    public static void MapSimpleValidatorEndPoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/validate/email/{email}", (HttpContext context, string inp) =>
         {
             bool[] checklist = {
                 inp.Contains("@"),
                 inp.Contains("."),
-                inp.lastIndexOf(".") > inp.IndexOf("@"),
-                inp.lastIndexOf(".") < inp.Length - 1,
+                inp.LastIndexOf(".") > inp.IndexOf("@"),
+                inp.LastIndexOf(".") < inp.Length - 1,
                 inp.IndexOf("@") > 0
             };
 
@@ -20,7 +20,7 @@ public static class CalculatorEndpoints
                 }
             }
 
-            return Result.Ok(new
+            return Results.Ok(new
             {
                 email = inp,
                 isValid = true
@@ -30,8 +30,7 @@ public static class CalculatorEndpoints
         {
             bool[] checklist = {
                 inp.Length == 10,
-                inp.All(char.IsDigit),
-                inp.IndexOfAny( new char('-').length >= 3 && inp.indexOfAny(new char('-').length <= 6))
+                inp.All(char.IsDigit)
             };
             foreach (var check in checklist)
             {
@@ -40,7 +39,7 @@ public static class CalculatorEndpoints
                     return Results.BadRequest(new { error = "Invalid phone number format." });
                 }
             }
-            return Result.Ok(new
+            return Results.Ok(new
             {
                 phone = inp,
                 isValid = true
@@ -60,7 +59,7 @@ public static class CalculatorEndpoints
                     return Results.BadRequest(new { error = "Invalid credit card format." });
                 }
             }
-            return Result.Ok(new
+            return Results.Ok(new
             {
                 creditCard = inp,
                 isValid = true
@@ -70,10 +69,7 @@ public static class CalculatorEndpoints
         {
             bool[] checklist = {
                 inp.Length >= 8,
-                inp.Any(char.IsUpper),
-                inp.Any(char.IsLower),
-                inp.Any(char.IsDigit),
-                inp.Any(ch => !char.IsLetterOrDigit(ch))
+                inp.Any(char.IsUpper) && inp.Any(char.IsLower) && inp.Any(char.IsDigit)
             };
             foreach (var check in checklist)
             {
@@ -82,7 +78,7 @@ public static class CalculatorEndpoints
                     return Results.BadRequest(new { error = "Weak password." });
                 }
             }
-            return Result.Ok(new
+            return Results.Ok(new
             {
                 password = inp,
                 isValid = true
