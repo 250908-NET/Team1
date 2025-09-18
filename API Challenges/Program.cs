@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -12,6 +13,8 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -20,19 +23,19 @@ app.UseHttpsRedirection();
 app.MapCalculatorEndpoints();
 
 // //Challenge 2: String Manipulation
-// app.MapTextEndpoints();
+app.MapTextEndpoints();
 
 // //Challenge 3: Number Games
-// app.MapNumbersEndpoints();
+app.MapNumbersEndpoints();
 
 // //Challenge 4: Date and Time Fun
-// app.MapDateTimeEndpoints();
+app.MapDateTimeEndpoints();
 
 // //Challenge 5: Simple Collections
-// app.MapColorsEndpoints();
+app.MapColorsEndpoints();
 
 // //Challenge 6: Temperature Converter
-// app.MapTemperatureEndpoints();
+app.MapTemperatureEndpoints();
 
 // //Challenge 7: Password Generator
 // app.MapPasswordEndpoints();
@@ -44,7 +47,7 @@ app.MapCalculatorEndpoints();
 // app.MapUnitConverterEndpoints();
 
 // //Challenge 10: Weather History
-// app.MapWeatherHistoryEndpoints();
+app.MapWeatherHistoryEndpoints();
 
 // //Challenge 11: Simple Games
 // app.MapSimpleGamesEndpoints();
