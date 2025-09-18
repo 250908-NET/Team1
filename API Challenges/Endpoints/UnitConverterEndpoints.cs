@@ -235,5 +235,23 @@ public static class UnitConverterEndpoints
 
             return Results.Ok(input * factor);
         });
+
+        app.MapGet("/convert/list-units/{type}", (string type) =>
+        {
+            switch (type.ToLower())
+            {
+                case "length":
+                    return Results.Ok("meters, feet, inches");
+                    break;
+                case "weight":
+                    return Results.Ok("kg, lbs, ounces");
+                    break;
+                case "volume":
+                    return Results.Ok("liters, gallons, cups");
+                    break;
+                default:
+                    return Results.BadRequest("Unsupported type. Supported types are: length, weight, volume.");
+            }
+        });
     }
 }
