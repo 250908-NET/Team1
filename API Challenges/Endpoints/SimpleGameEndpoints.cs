@@ -1,9 +1,9 @@
-public static class GameEndpoints
+public static class SimpleGameEndpoints
 {
     private static int? secretNumber = null;
     private static readonly Random random = new Random();
 
-    public static void MapGamesEndpoints(this WebApplication app)
+    public static void MapSimpleGamesEndpoints(this WebApplication app)
     {
         //Guess the Number
         app.MapGet("/game/guess/{number:int}", (int number) =>
