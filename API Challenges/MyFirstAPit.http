@@ -1,0 +1,6 @@
+@MyFirstAPit_HostAddress = http://localhost:5019
+
+GET {{MyFirstAPit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
