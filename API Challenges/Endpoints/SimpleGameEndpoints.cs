@@ -12,7 +12,7 @@ public static class SimpleGameEndpoints
     }
 
     private static Dictionary<int, int> sessionStorage = new Dictionary<int, int>();
-    private static int sessionCounter = 0;
+    private static int sessionCounter = 1;
 
     private static readonly Random random = new Random();
 
@@ -20,20 +20,21 @@ public static class SimpleGameEndpoints
     {
         app.MapPost("/game/guess-number", async (HttpContext context) =>
         {
-            GuessNumberRequest request = await context.Request.ReadFromJsonAsync<GuessNumberRequest>();
+            GuessNumberRequest request = await context.ReadFromJsonAsync<GuessNumberRequest>();
 
             // if no sessionId, make one and return intro message. ignore any number
             // if sessionId:
             //   if no number, return message asking for number
             //   if number, check against secret number and return result in message
 
-            if (request.SessionId == null)
+            if (request.SessionId == 0)
             {
                 // Initialize a new session
                 int currentSession = sessionCounter++;
                 int secretNumber = random.Next(1, 100);
                 sessionStorage.Add(currentSession, secretNumber);
 
+                // return Results.Ok(request);
                 // Return new sessionId and intro message
                 return Results.Ok(new GuessNumberResponse
                 {
