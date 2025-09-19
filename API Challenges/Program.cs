@@ -20,7 +20,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 //Challenge 1: Calculator
-app.MapCalculatorEndpoints();
+//app.MapCalculatorEndpoints();
 
 // //Challenge 2: String Manipulation
 app.MapTextEndpoints();
@@ -50,6 +50,6 @@ app.MapUnitConverterEndpoints();
 app.MapWeatherHistoryEndpoints();
 
 // //Challenge 11: Simple Games
-// app.MapSimpleGamesEndpoints();
+app.MapSimpleGamesEndpoints();
 
 app.Run();
