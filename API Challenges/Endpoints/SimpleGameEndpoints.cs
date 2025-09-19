@@ -1,9 +1,11 @@
+using System.Text.Json;
+
 public static class SimpleGameEndpoints
 {
     private class GuessNumberRequest
     {
-        public int SessionId { get; }
-        public int Guess { get; }
+        public int SessionId { get; set; }
+        public int Guess { get; set; }
     }
     private class GuessNumberResponse
     {
@@ -18,14 +20,10 @@ public static class SimpleGameEndpoints
 
     public static void MapSimpleGamesEndpoints(this WebApplication app)
     {
-        app.MapPost("/game/guess-number", async (HttpContext context) =>
+        app.MapPost("/game/guess-number", (GuessNumberRequest request) =>
         {
-            GuessNumberRequest request = await context.ReadFromJsonAsync<GuessNumberRequest>();
-
-            // if no sessionId, make one and return intro message. ignore any number
-            // if sessionId:
-            //   if no number, return message asking for number
-            //   if number, check against secret number and return result in message
+            // GuessNumberRequest request = await context.ReadFromJsonAsync<GuessNumberRequest>();
+            // GuessNumberRequest request = await JsonSerializer.DeserializeAsync<GuessNumberRequest>(request.Body);
 
             if (request.SessionId == 0)
             {
@@ -34,7 +32,6 @@ public static class SimpleGameEndpoints
                 int secretNumber = random.Next(1, 100);
                 sessionStorage.Add(currentSession, secretNumber);
 
-                // return Results.Ok(request);
                 // Return new sessionId and intro message
                 return Results.Ok(new GuessNumberResponse
                 {
