@@ -47,6 +47,6 @@ app.UseHttpsRedirection();
 // app.MapWeatherHistoryEndpoints();
 
 // //Challenge 11: Simple Games
- app.MapSimpleGamesEndpoints();
+ app.MapGamesEndpoints();
 
 app.Run();
