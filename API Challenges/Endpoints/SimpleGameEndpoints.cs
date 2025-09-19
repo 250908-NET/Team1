@@ -88,6 +88,17 @@ public static class SimpleGameEndpoints
             }
         });
 
+        // Flip Coin
+        app.MapGet("/game/coin-flip/{count}", (int count) =>
+        {
+            List<string> results = [];
+            for (int i = 0; i < count; i++)
+            {
+                results.Add(random.Next(2) == 0 ? "Heads" : "Tails");
+            }
+            return Results.Ok(results);
+        });
+
         //  Reset the game manually
         // app.MapPost("/game/reset", () =>
         // {
