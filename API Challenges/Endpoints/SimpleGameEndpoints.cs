@@ -1,47 +1,97 @@
 public static class SimpleGameEndpoints
 {
-    private static int? secretNumber = null;
+    private class GuessNumberRequest
+    {
+        public int SessionId { get; }
+        public int Guess { get; }
+    }
+    private class GuessNumberResponse
+    {
+        public int SessionId { get; set; }
+        public required string Message { get; set; }
+    }
+
+    private static Dictionary<int, int> sessionStorage = new Dictionary<int, int>();
+    private static int sessionCounter = 0;
+
     private static readonly Random random = new Random();
 
     public static void MapSimpleGamesEndpoints(this WebApplication app)
     {
-        //Guess the Number
-        app.MapGet("/game/guess/{number:int}", (int number) =>
+        app.MapPost("/game/guess-number", async (HttpContext context) =>
         {
-            // Initialize secret number if not already set
-            if (secretNumber == null)
-            {
-                secretNumber = random.Next(1, 100);
-            }
+            GuessNumberRequest request = await context.Request.ReadFromJsonAsync<GuessNumberRequest>();
 
-            // Validate input
-            if (number < 1 || number > 100)
-            {
-                return Results.BadRequest(new { message = "Please enter a number between 1 and 100." });
-            }
+            // if no sessionId, make one and return intro message. ignore any number
+            // if sessionId:
+            //   if no number, return message asking for number
+            //   if number, check against secret number and return result in message
 
-            // Compare guess
-            if (number < secretNumber)
+            if (request.SessionId == null)
             {
-                return Results.Ok(new { result = "Too low! Try again." });
-            }
-            else if (number > secretNumber)
-            {
-                return Results.Ok(new { result = "Too high! Try again." });
+                // Initialize a new session
+                int currentSession = sessionCounter++;
+                int secretNumber = random.Next(1, 100);
+                sessionStorage.Add(currentSession, secretNumber);
+
+                // Return new sessionId and intro message
+                return Results.Ok(new GuessNumberResponse
+                {
+                    SessionId = currentSession,
+                    Message = "Welcome to the number guessing game! Guess a number between 1 and 100. (Format your guess in a JSON with the provided `SessionId` and with `Guess` equal to your guess.)"
+                });
             }
             else
             {
-                // Reset for next round
-                secretNumber = null;
-                return Results.Ok(new { result = " Congratulations! You guessed the number!" });
+                int secretNumber = sessionStorage[request.SessionId];
+                int guess = request.Guess;
+
+                // Validate input
+                if (guess == null || guess < 1 || guess > 100)
+                {
+                    return Results.Ok(new GuessNumberResponse
+                    {
+                        SessionId = request.SessionId,
+                        Message = "Please guess a number between 1 and 100. (Format your guess in a JSON with the provided `SessionId` and with `Guess` equal to your guess.)"
+                    });
+                }
+
+                // Compare guess
+                if (guess < secretNumber)
+                {
+                    return Results.Ok(new GuessNumberResponse
+                    {
+                        SessionId = request.SessionId,
+                        Message = "Too low! Try again."
+                    });
+                }
+                else if (guess > secretNumber)
+                {
+                    return Results.Ok(new GuessNumberResponse
+                    {
+                        SessionId = request.SessionId,
+                        Message = "Too high! Try again."
+                    });
+                }
+                else
+                {
+                    // Reset for next round
+                    sessionStorage[request.SessionId] = random.Next(1, 100);
+
+                    return Results.Ok(new GuessNumberResponse
+                    {
+                        SessionId = request.SessionId,
+                        Message = $"Congratulations! You guessed the number: {secretNumber}. The game has been reset--guess a new number!"
+                    });
+                }
             }
         });
 
         //  Reset the game manually
-        app.MapPost("/game/reset", () =>
-        {
-            secretNumber = random.Next(1, 100);
-            return Results.Ok(new { message = "Game has been reset. A new number has been chosen between 1 and 100." });
-        });
+        // app.MapPost("/game/reset", () =>
+        // {
+        //     secretNumber = random.Next(1, 100);
+        //     return Results.Ok(new { message = "Game has been reset. A new number has been chosen between 1 and 100." });
+        // });
     }
 }
